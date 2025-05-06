@@ -1,6 +1,7 @@
 import express from "express"
 import mongoose from "mongoose"
 import cors from "cors"
+import bcrypt from "bcrypt"
 import bodyParser from "body-parser"
 import User from "./Models/User.js"
 
@@ -31,25 +32,45 @@ app.post("/api/login",async(req,res)=>{
     }
 
     
-    if(user.password == req.body.password)
+    if(bcrypt.compareSync(user.password,req.body.password))
     {
-        return res.json({"message":true,"user":{
-            "fullName":user.fullName,
-            "username":user.username,
-            "age":user.age
-        }})
+        return res.json({
+            "message":true,
+            "user":{
+                "fullName":user.fullName,
+                "username":user.username,
+                "age":user.age
+            }})
     }
 
     return res.json({"message":"Incorrect Password!"})
 
 })
 
-app.post("/api/SignUp",async (req,res)=>{
-    let user = new User(req.body)
-    await user.save()
-   return res.json({"user created":user})
-})
-
+app.post("/api/SignUp", async (req, res) => {
+    try {
+      let { fullName, age, username, password } = req.body;
+  
+      // Hash the password
+      let hashedPassword = bcrypt.hashSync(password, 10);
+      console.log(password,hashedPassword);
+  
+      // Create a new user (assuming you have a Mongoose User model)
+      let user = new User({
+        fullName,
+        age,
+        username,
+        password: hashedPassword
+      });
+  
+      await user.save();
+  
+      return res.json({ message: "User created", user });
+    } catch (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Something went wrong" });
+    }
+  });
 
 
 app.listen(5500,()=>{

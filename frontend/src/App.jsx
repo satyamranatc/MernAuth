@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from 'react'
-import {BrowserRouter, Routes,Route} from "react-router-dom"
+import {BrowserRouter, Routes,Route,Navigate} from "react-router-dom"
 
 
 
@@ -20,17 +20,17 @@ export default function App() {
   useEffect(()=>{
     setIsLoggedIn(localStorage.getItem("isLoggedIn"))
 
-  })
+  },[])
   return (
     <div>
 
       <BrowserRouter>
-      <NavBar/>
+      <NavBar IsLoggedIn = {IsLoggedIn} />
 
         <Routes>
           <Route path='/' element = {<Home/>} />
           <Route path='/Blog' element = {
-            IsLoggedIn?<Blog/>:<Login/>
+            IsLoggedIn?(<Blog/>) :  <Navigate to="/Login" replace />
           } />
           <Route path='/Login' element = {<Login/>} />
           <Route path='/Signup' element = {<SignUp/>} />

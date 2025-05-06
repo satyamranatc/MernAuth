@@ -1,9 +1,12 @@
 import React,{useState,useEffect} from 'react'
+import { useNavigate } from 'react-router-dom';
 import axios from "axios"
 
 export default function LogIn() {
+  let navigate = useNavigate();
 
   async function handleSubmit(e) {
+
     e.preventDefault();
     let Data = {
       username: e.target[0].value,
@@ -15,6 +18,9 @@ export default function LogIn() {
     {
       localStorage.setItem("isLoggedIn",true)
       localStorage.setItem("user",JSON.stringify(res.data.user))
+      window.location.reload()
+      navigate("/Blog")
+
     }
     else
     {
