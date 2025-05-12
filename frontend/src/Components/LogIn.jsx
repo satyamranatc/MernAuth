@@ -13,6 +13,7 @@ export default function LogIn() {
       password: e.target[1].value
     }
     let res = await axios.post("http://localhost:5500/api/login",Data)
+    console.log(Data);
     
     if(res.data.message == true)
     {
