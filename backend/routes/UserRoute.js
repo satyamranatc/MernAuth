@@ -6,9 +6,8 @@ import {login,SignUp} from "../controller/UserController.js"
 const router = Router();
 
 
-
 router.post("/login",login)
-router.post("/SignUp",SignUp );
+router.post("/SignUp",SignUp);
 
 
 
